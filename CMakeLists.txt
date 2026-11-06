@@ -1,5 +1,5 @@
 # Minimum CMake version required for FetchContent and other modern features
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.10)
 
 # Define the project name and specify we're using C++
 project(Graphing_Tool LANGUAGES CXX)
@@ -7,6 +7,8 @@ project(Graphing_Tool LANGUAGES CXX)
 # Set C++ standard to C++17 and make it required
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
 # ============================================================================
 # User Options
@@ -53,7 +55,8 @@ if(NOT wxWidgets_FOUND)
   set(wxBUILD_SHARED ON  CACHE BOOL "" FORCE)     # Build shared libraries
   set(wxBUILD_SAMPLES OFF CACHE BOOL "" FORCE)    # Don't build wxWidgets samples
   set(wxBUILD_TESTS   OFF CACHE BOOL "" FORCE)    # Don't build wxWidgets tests
-  
+  set(wxBUILD_AUI ON CACHE BOOL "" FORCE)        # Enable AUI (Advanced User Interface)
+
   # On Linux, use GTK3 toolkit
   if(UNIX AND NOT APPLE)
     set(wxBUILD_TOOLKIT gtk3 CACHE STRING "" FORCE)
@@ -89,9 +92,9 @@ endif()
 add_library(graph_wx INTERFACE)
 
 # Link the appropriate wxWidgets targets based on what's available
-if(TARGET wx::core AND TARGET wx::base)
+if(TARGET wx::core AND TARGET wx::base AND TARGET wx::aui)
   # Modern CMake targets (preferred)
-  target_link_libraries(graph_wx INTERFACE wx::core wx::base)
+  target_link_libraries(graph_wx INTERFACE wx::core wx::base wx::aui)
 elseif(wxWidgets_FOUND)
   # Legacy FindwxWidgets.cmake variables
   include(${wxWidgets_USE_FILE})
@@ -107,8 +110,10 @@ endif()
 # ============================================================================
 # Define the list of source files for the application
 set(_main_sources
-  ${CMAKE_SOURCE_DIR}/src/App.cpp
-  ${CMAKE_SOURCE_DIR}/src/Mainframe.cpp
+  ${CMAKE_SOURCE_DIR}/src/UI/App.cpp
+  ${CMAKE_SOURCE_DIR}/src/UI/MainFrame.cpp
+  ${CMAKE_SOURCE_DIR}/src/UI/Graph.cpp
+  ${CMAKE_SOURCE_DIR}/src/UI/Functions.cpp
 )
 
 # Check if at least one source file exists before creating the target
@@ -124,7 +129,7 @@ if(_have_any_source)
   add_executable(Graphing_Tool ${_main_sources})
   
   # Add include directory for header files
-  target_include_directories(Graphing_Tool PRIVATE ${CMAKE_SOURCE_DIR}/headers)
+  target_include_directories(Graphing_Tool PRIVATE ${CMAKE_SOURCE_DIR}/include)
   
   # Link the wxWidgets interface library to the application
   target_link_libraries(Graphing_Tool PRIVATE graph_wx)
