@@ -27,12 +27,13 @@ UI::Functions::Functions(wxWindow* parent)
         wxFONTSTYLE_NORMAL,
         wxFONTWEIGHT_BOLD
     ));
+    infoText->SetForegroundColour(*wxBLACK);
 
     // Expression reference
     wxStaticText* infoContent = new wxStaticText(
         infoPanel,
         wxID_ANY,
-        "+ - * / ^ () x e π"
+        wxString::FromUTF8("+ - * / ^ () x e \xCF\x80\n sin() cos() tan() asin() acos() atan()\n ln() log() exp() sqrt() abs()\n floor() ceil() round()")
     );
 
     infoContent->SetFont(wxFont(
@@ -41,6 +42,7 @@ UI::Functions::Functions(wxWindow* parent)
         wxFONTSTYLE_NORMAL,
         wxFONTWEIGHT_NORMAL
     ));
+    infoContent->SetForegroundColour(*wxBLACK);
 
     // Information panel layout
     wxBoxSizer* infoSizer = new wxBoxSizer(wxVERTICAL);
@@ -49,7 +51,10 @@ UI::Functions::Functions(wxWindow* parent)
     infoSizer->Add(infoContent, 0, wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
     infoPanel->SetSizer(infoSizer);
-    infoPanel->SetMinSize(wxSize(-1, 100));
+    const wxSize infoSize = infoSizer->CalcMin();
+    infoPanel->SetMinSize(infoSize);
+    infoPanel->SetSize(infoSize);
+    infoPanel->Layout();
 
     // Add information panel to AUI
     auiManager.AddPane(
@@ -58,8 +63,8 @@ UI::Functions::Functions(wxWindow* parent)
             .Name("InformationPane")
             .Bottom()
             .Caption("Information Panel")
-            .BestSize(-1, 120)
-            .MinSize(-1, 100)
+            .BestSize(infoSize)
+            .MinSize(infoSize)
     );
 
     // Apply AUI layout
