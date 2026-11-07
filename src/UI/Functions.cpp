@@ -5,10 +5,11 @@
 UI::Functions::Functions(wxWindow* parent)
     : wxPanel(parent, wxID_ANY) {
     // Set the background color of the panel
-    SetBackgroundColour(wxColour(240, 240, 240)); // Light gray background
+    SetBackgroundColour(wxColour(255, 255, 255)); // Light gray background
 
     auiManager.SetManagedWindow(this);
 
+    auiManager.Update();
 }
 
 UI::Functions::~Functions() {
@@ -22,7 +23,7 @@ UI::Function::Function(wxWindow* parent)
 
     auiManager.SetManagedWindow(this);
 
-    auiManager.AddPane(this, wxAuiPaneInfo().Center().Caption("Function Panel"));
+    auiManager.Update();
 }
 
 UI::Function::~Function() {

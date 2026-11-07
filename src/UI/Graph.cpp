@@ -9,7 +9,7 @@ UI::Graph::Graph(wxWindow* parent)
 
     auiManager.SetManagedWindow(this);
 
-    auiManager.AddPane(this, wxAuiPaneInfo().Center().Caption("Graph Panel"));
+    auiManager.Update();    
 }
 
 UI::Graph::~Graph() {

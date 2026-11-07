@@ -114,6 +114,7 @@ set(_main_sources
   ${CMAKE_SOURCE_DIR}/src/UI/MainFrame.cpp
   ${CMAKE_SOURCE_DIR}/src/UI/Graph.cpp
   ${CMAKE_SOURCE_DIR}/src/UI/Functions.cpp
+  ${CMAKE_SOURCE_DIR}/src/UI/Controls.cpp
 )
 
 # Check if at least one source file exists before creating the target
