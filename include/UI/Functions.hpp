@@ -14,7 +14,7 @@ namespace UI{
             wxAuiManager auiManager;
     };
 
-    class Function: wxPanel {
+    class Function:public wxPanel {
         public:
             Function(wxWindow* parent);
             ~Function();
